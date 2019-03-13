@@ -13,4 +13,8 @@ public class GithubService {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
+
+    public GithubAPI getAPI() {
+        return retrofit.create(GithubAPI.class);
+    }
 }
