@@ -5,9 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.javacodersnairobi.adapter.GithubAdapter;
+import com.example.javacodersnairobi.model.GithubUsers;
+import com.example.javacodersnairobi.model.GithubUsersResponse;
+import com.example.javacodersnairobi.presenter.GithubPresenter;
+import com.example.javacodersnairobi.view.AllProfilesView;
+
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements AllProfilesView {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -19,10 +28,22 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        new GithubPresenter().getAllUsers(this);
     }
 
     public void showProfileDetails(View view) {
         Intent intent = new Intent(this, DetailActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void displayProfiles(GithubUsersResponse response) {
+        List<GithubUsers> users = response.getGithubUsers();
+        recyclerView.setAdapter(new GithubAdapter(users, this));
+    }
+
+    @Override
+    public void displayError() {
+        Log.i("Network", "Could not fetch data from the API.");
     }
 }

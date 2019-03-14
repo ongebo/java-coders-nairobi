@@ -6,7 +6,7 @@ public class GithubUsers {
     @SerializedName("avatar_url")
     String avatar;
 
-    @SerializedName("name")
+    @SerializedName("login")
     String username;
 
     String bio;
