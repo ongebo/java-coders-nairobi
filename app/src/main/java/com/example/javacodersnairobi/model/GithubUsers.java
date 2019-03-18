@@ -18,6 +18,9 @@ public class GithubUsers {
 
     String following;
 
+    @SerializedName("html_url")
+    String profile;
+
     public String getAvatar() {
         return avatar;
     }
@@ -40,5 +43,9 @@ public class GithubUsers {
 
     public String getFollowing() {
         return following;
+    }
+
+    public String getProfileUrl() {
+        return profile;
     }
 }
