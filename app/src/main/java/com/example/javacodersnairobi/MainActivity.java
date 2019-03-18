@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
 import com.example.javacodersnairobi.adapter.GithubAdapter;
 import com.example.javacodersnairobi.model.GithubUsers;
@@ -19,6 +18,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements AllProfilesView {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+    public static final String EXTRA_USERNAME = "com.example.javacodersnairobi.USERNAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements AllProfilesView {
         new GithubPresenter().getAllUsers(this);
     }
 
-    public void showProfileDetails(View view) {
+    public void showProfileDetails(GithubUsers profileInfo) {
         Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(EXTRA_USERNAME, profileInfo.getUsername());
         startActivity(intent);
     }
 
