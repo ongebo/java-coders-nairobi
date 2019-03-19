@@ -1,27 +1,34 @@
-package com.example.javacodersnairobi;
+package com.example.javacodersnairobi.view;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.javacodersnairobi.R;
 import com.example.javacodersnairobi.model.GithubUsers;
 import com.example.javacodersnairobi.presenter.GithubPresenter;
-import com.example.javacodersnairobi.view.SingleProfileView;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity implements SingleProfileView {
+    private ProgressBar progressBar;
+    private GithubPresenter presenter;
+    private String userHandle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        String userHandle = getIntent().getStringExtra(MainActivity.EXTRA_USERNAME);
-        new GithubPresenter().getSingleUser(userHandle, this);
+        progressBar = findViewById(R.id.progressBar2);
+        presenter = new GithubPresenter();
+
+        userHandle = getIntent().getStringExtra(MainActivity.EXTRA_USERNAME);
+        presenter.getSingleUser(userHandle, this);
     }
 
     @Override
@@ -57,10 +64,20 @@ public class DetailActivity extends AppCompatActivity implements SingleProfileVi
                 startActivity(Intent.createChooser(intent, "Share Github profile with:"));
             }
         });
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void displayError() {
-        Log.i("Fetch Error", "Could not retrieve user profile data.");
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.detail_layout),
+                "Could not retrieve user profile data.", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Reload", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.getSingleUser(userHandle, DetailActivity.this);
+                snackbar.dismiss();
+            }
+        });
+        snackbar.show();
     }
 }

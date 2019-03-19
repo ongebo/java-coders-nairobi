@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.javacodersnairobi.MainActivity;
+import com.example.javacodersnairobi.view.MainActivity;
 import com.example.javacodersnairobi.R;
 import com.example.javacodersnairobi.model.GithubUsers;
 import com.squareup.picasso.Picasso;
@@ -37,7 +37,7 @@ public class GithubAdapter extends RecyclerView.Adapter<GithubAdapter.GithubUser
     @Override
     public GithubUsersViewHolder onCreateViewHolder(ViewGroup parent, int type) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.view_item, parent, false);
+                .inflate(R.layout.grid_view_item, parent, false);
         return new GithubUsersViewHolder(view);
     }
 
