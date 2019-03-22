@@ -48,4 +48,32 @@ public class GithubUsers {
     public String getProfileUrl() {
         return profile;
     }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public void setRepos(String repos) {
+        this.repos = repos;
+    }
+
+    public void setFollowers(String followers) {
+        this.followers = followers;
+    }
+
+    public void setFollowing(String following) {
+        this.following = following;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 }

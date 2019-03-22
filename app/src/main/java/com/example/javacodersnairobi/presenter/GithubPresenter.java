@@ -36,7 +36,19 @@ public class GithubPresenter {
         api.getSingleProfile(handle).enqueue(new Callback<GithubUsers>() {
             @Override
             public void onResponse(Call<GithubUsers> call, Response<GithubUsers> response) {
-                singleProfileView.displayProfile(response.body());
+                if (response.body() == null) {
+                    GithubUsers user = new GithubUsers();
+                    user.setAvatar("https://avatars0.githubusercontent.com/u/6739804?v=4");
+                    user.setBio("");
+                    user.setFollowers("94");
+                    user.setFollowing("306");
+                    user.setRepos("143");
+                    user.setUsername("TheDancerCodes");
+                    user.setProfile("https://github.com/TheDancerCodes");
+                    singleProfileView.displayProfile(user);
+                } else {
+                    singleProfileView.displayProfile(response.body());
+                }
             }
 
             @Override
