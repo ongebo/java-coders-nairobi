@@ -1,0 +1,60 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  before_all do
+    ENV["SLACK_URL"] = ENV["SLACK_WORKSPACE_URL"]
+   end
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Build and upload APK to converge-codelab-aq channel on Slack"
+  lane :slackbuild do
+    gradle(task: "assembleRelease")
+    slack(message: "APK built successfully!")
+    upload_to_slack()
+  end
+
+  # ref: https://android.jlelse.eu/fastlane-your-android-app-build-and-upload-apk-to-slack-1a3e20cf6f8c
+  desc "Upload the APK to the converge-codelab-qa Slack channel"
+  private_lane :upload_to_slack do |options|
+    file_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    file_name = file_path.gsub(/\/.*\//,"")
+    token = ENV["SLACK_TOKEN"]
+    channel = "converge-codelab-qa"
+    sh "echo Uploading " + file_name + " to converge-codelab-qa"
+    sh "curl https://slack.com/api/files.upload -F token=\"" + token + "\" -F channels=\"" + channel + "\" -F title=\"" + file_name + "\" -F filename=\"" + file_name + "\" -F file=@" + file_path
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    # upload_to_play_store
+  end
+end
